@@ -3,14 +3,38 @@ import axios from "axios"
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet"
 import { useNavigate } from "react-router-dom"
 
-function PinPlacer({ onPin }) {
+function PinPlacer({ onPin, submitted }) {
   useMapEvents({
     click(e) {
-      onPin([e.latlng.lat, e.latlng.lng])
+        if (submitted) return
+        onPin([e.latlng.lat, e.latlng.lng])
     }
   })
   return null
 }
+
+import { divIcon } from "leaflet"
+
+const userIcon = divIcon({
+  className: "",
+  html: `<div style="width:16px;height:16px;background:#3b82f6;border-radius:50%;border:2px solid white"></div>`,
+  iconSize: [16, 16],
+  iconAnchor: [8, 8]
+})
+
+const aiIcon = divIcon({
+  className: "",
+  html: `<div style="width:16px;height:16px;background:#a855f7;border-radius:50%;border:2px solid white"></div>`,
+  iconSize: [16, 16],
+  iconAnchor: [8, 8]
+})
+
+const trueIcon = divIcon({
+  className: "",
+  html: `<div style="width:16px;height:16px;background:#22c55e;border-radius:50%;border:2px solid white"></div>`,
+  iconSize: [16, 16],
+  iconAnchor: [8, 8]
+})
 
 function Game() {
   const [image, setImage] = useState(null)
@@ -18,6 +42,7 @@ function Game() {
   const [userPin, setUserPin] = useState(null)
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const navigate = useNavigate()
 
   const fetchRound = async () => {
@@ -43,6 +68,7 @@ function Game() {
         user_lng: userPin[1]
       })
       setResult(response.data)
+      setSubmitted(true)
     } catch (err) {
       console.log(err)
     } finally {
@@ -94,14 +120,16 @@ function Game() {
           <div className="flex-1 rounded-xl overflow-hidden">
             <MapContainer center={[20, 0]} zoom={2} style={{ height: "100%", width: "100%" }}>
               <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <PinPlacer onPin={setUserPin} />
-              {userPin && <Marker position={userPin}><Popup>Your guess</Popup></Marker>}
+              <PinPlacer onPin={setUserPin} submitted={submitted}/>
+              {userPin && <Marker position={userPin} icon={userIcon}>
+                <Popup>Your guess</Popup>
+              </Marker>}
               {result && (
                 <>
-                  <Marker position={[result.true_lat, result.true_lng]}>
+                  <Marker position={[result.true_lat, result.true_lng]} icon={trueIcon}>
                     <Popup>True location</Popup>
                   </Marker>
-                  <Marker position={[result.ai_lat, result.ai_lng]}>
+                  <Marker position={[result.ai_lat, result.ai_lng]} icon={aiIcon}>
                     <Popup>AI guess</Popup>
                   </Marker>
                 </>
