@@ -13,4 +13,4 @@ the location of street view images.
 - ML: PyTorch MLP on top of StreetCLIP embeddings
 
 ## Link to training repo
-[[Geoguessr DL model development](https://github.com/max-danenhower/geolocation_bot)]
+[Geoguessr DL model development(https://github.com/max-danenhower/geolocation_bot)]
