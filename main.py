@@ -14,6 +14,7 @@ import numpy as np
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 from math import radians, sin, cos, sqrt, atan2
+from datasets import load_dataset
 
 from database import engine, get_db
 from models import Base, Prediction, Round

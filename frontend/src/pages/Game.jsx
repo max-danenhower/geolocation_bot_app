@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom"
 function PinPlacer({ onPin, submitted }) {
   useMapEvents({
     click(e) {
-        if (submitted) return
-        onPin([e.latlng.lat, e.latlng.lng])
+      if (submitted) return
+      onPin([e.latlng.lat, e.latlng.lng])
     }
   })
   return null
@@ -52,6 +52,7 @@ function Game() {
     const response = await axios.get("http://localhost:8000/round")
     setImage(response.data.image)
     setRoundId(response.data.round_id)
+    setSubmitted(false)
   }
 
   useEffect(() => {
@@ -61,6 +62,7 @@ function Game() {
   const handleSubmit = async () => {
     if (!userPin) return
     setLoading(true)
+    setSubmitted(true)
     try {
       const response = await axios.post("http://localhost:8000/score", {
         round_id: roundId,
@@ -68,11 +70,11 @@ function Game() {
         user_lng: userPin[1]
       })
       setResult(response.data)
-      setSubmitted(true)
     } catch (err) {
       console.log(err)
     } finally {
       setLoading(false)
+      setSubmitted(true)
     }
   }
 
