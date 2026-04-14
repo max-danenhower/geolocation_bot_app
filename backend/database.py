@@ -4,8 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import os
 
-#load_dotenv(dotenv_path="../.env", override=False)
-load_dotenv(dotenv_path="${{Postgres.DATABASE_URL}}")
+load_dotenv(dotenv_path="../.env", override=False)
 print("DATABASE_URL:", os.getenv("DATABASE_URL"))
 
 
