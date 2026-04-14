@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 
 #load_dotenv(dotenv_path="../.env", override=False)
+load_dotenv(dotenv_path="${{Postgres.DATABASE_URL}}")
 print("DATABASE_URL:", os.getenv("DATABASE_URL"))
 
 
