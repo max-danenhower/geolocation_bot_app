@@ -11,7 +11,6 @@ async-timeout==5.0.1
 attrs==26.1.0
 certifi==2026.2.25
 charset-normalizer==3.4.7
-click==8.1.8
 cloudpickle==3.1.2
 comm==0.2.3
 dask==2024.8.0
