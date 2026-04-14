@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv(dotenv_path="../.env", override=False)
+print(f"Current Environment Keys: {os.environ.keys()}")
+
 print("DATABASE_URL:", os.getenv("DATABASE_URL"))
 
 
