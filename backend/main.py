@@ -24,9 +24,6 @@ Base.metadata.create_all(bind=engine)
 # max file size for uploads (10MB)
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
-# set device for torch
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 # define MLP
 regressor = nn.Sequential(
     nn.Linear(768, 512),
@@ -37,13 +34,13 @@ regressor = nn.Sequential(
     nn.ReLU(),
     nn.Linear(128, 2),
     nn.Sigmoid()
-).to(device)
+)
 
 # load pretrained weights
-regressor.load_state_dict(torch.load("model_weights.pth", map_location=device))
+regressor.load_state_dict(torch.load("model_weights.pth"))
 
 # load CLIP model and processor
-street_clip_model = CLIPModel.from_pretrained("geolocal/StreetCLIP").to(device)
+street_clip_model = CLIPModel.from_pretrained("geolocal/StreetCLIP")
 street_clip_processor = CLIPProcessor.from_pretrained("geolocal/StreetCLIP")
 
 # load coordinate normalization stats (from training data)
@@ -75,7 +72,6 @@ def run_model(image: Image.Image):
 
     # embed image
     inputs = street_clip_processor(images=image, return_tensors="pt", padding=True)
-    inputs = {k: v.to(device) for k, v in inputs.items()}
 
     with torch.no_grad():
         image_feat = street_clip_model.get_image_features(**inputs)
